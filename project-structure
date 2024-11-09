@@ -1,0 +1,11 @@
+reader-mode/
+  ├── manifest.json
+  ├── popup/
+  │   ├── popup.html
+  │   ├── popup.css
+  │   └── popup.js
+  ├── content/
+  │   ├── content.css
+  │   └── content.js
+  └── icons/
+      └── icon.svg 

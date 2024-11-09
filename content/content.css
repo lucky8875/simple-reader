@@ -1,0 +1,668 @@
+/* 主题相关的 CSS 变量 */
+:root {
+  --light-bg: #ffffff;
+  --light-text: #333333;
+  --light-title: #000000;
+  --light-border: #eeeeee;
+  --light-hover: rgba(0, 0, 0, 0.05);
+  
+  --dark-bg: #1a1a1a;
+  --dark-text: #ffffff;
+  --dark-title: #ffffff;
+  --dark-border: #444444;
+  --dark-hover: rgba(255, 255, 255, 0.15);
+  
+  --dark-link: #7eb6ff;
+  --dark-link-hover: #99c5ff;
+}
+
+/* 浅色主题 */
+.theme-light {
+  --bg-color: var(--light-bg);
+  --text-color: var(--light-text);
+  --title-color: var(--light-title);
+  --border-color: var(--light-border);
+  --hover-color: var(--light-hover);
+}
+
+/* 深色主题 */
+.theme-dark {
+  --bg-color: var(--dark-bg);
+  --text-color: var(--dark-text);
+  --title-color: var(--dark-title);
+  --border-color: var(--dark-border);
+  --hover-color: var(--dark-hover);
+}
+
+/* 使用主题变量 */
+#reader-mode-container {
+  background-color: var(--bg-color);
+  color: var(--text-color);
+}
+
+#reader-mode-container h1,
+#reader-mode-container h2,
+#reader-mode-container h3,
+#reader-mode-container h4 {
+  color: var(--title-color);
+}
+
+#reader-sidebar {
+  background: var(--bg-color);
+  border-right-color: var(--border-color);
+}
+
+.toc-container h3 {
+  color: var(--title-color);
+}
+
+.toc-item {
+  color: var(--text-color);
+}
+
+.toc-item:hover {
+  background: var(--hover-color);
+}
+
+#settings-panel {
+  background: var(--bg-color);
+  color: var(--text-color);
+}
+
+#settings-toggle,
+#toc-toggle {
+  background: var(--bg-color);
+  border-color: var(--border-color);
+  color: var(--text-color);
+}
+
+.settings-item label {
+  color: var(--text-color);
+}
+
+.settings-item select,
+.settings-item input {
+  background: var(--bg-color);
+  color: var(--text-color);
+  border-color: var(--border-color);
+}
+
+/* 移除原有的 prefers-color-scheme 媒体查询，现在由 JavaScript 控制主题 */
+
+/* 修改容器布局 */
+body {
+  margin: 0;
+  padding: 0;
+  background-color: var(--bg-color);
+}
+
+/* 内容容器样式 */
+#reader-mode-container {
+  width: var(--reader-width, 800px);
+  max-width: min(var(--reader-width, 800px), calc(100% - 320px)); /* 考虑侧边栏宽度 */
+  margin-left: calc(280px + max(20px, (100vw - 280px - var(--reader-width, 800px)) / 2));
+  margin-right: 20px;
+  padding: 2rem;
+  font-family: var(--reader-font-family, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif);
+  line-height: var(--reader-line-height, 1.6);
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  box-sizing: border-box;
+}
+
+/* 侧边栏样式 */
+#reader-sidebar {
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 280px;
+  height: 100vh;
+  background: var(--bg-color);
+  border-right: 1px solid var(--border-color);
+  padding: 20px;
+  overflow-y: auto;
+  z-index: 9999;
+  box-sizing: border-box;
+}
+
+/* 响应式布局 */
+@media (max-width: 1200px) {
+  #reader-mode-container {
+    margin-left: 300px; /* 侧边栏宽度 + 20px 间距 */
+    max-width: calc(100vw - 320px);
+  }
+}
+
+@media (max-width: 768px) {
+  #reader-mode-container {
+    margin: 0 auto;
+    padding: 1rem;
+    max-width: 100%;
+    width: 100%;
+  }
+
+  #reader-sidebar {
+    transform: translateX(-100%);
+    transition: transform 0.3s ease;
+  }
+
+  #reader-sidebar.show {
+    transform: translateX(0);
+  }
+}
+
+/* 设置面板样式优化 */
+#settings-panel {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 320px;
+  max-width: 90vw;
+  background: var(--bg-color);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  padding: 24px;
+  z-index: 10001;
+  display: none;
+  box-sizing: border-box;
+}
+
+#settings-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 10000;
+  display: none;
+}
+
+#settings-panel.show,
+#settings-overlay.show {
+  display: block;
+}
+
+/* 目录样式 */
+.toc-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.toc-item {
+  padding: 6px 0;
+  cursor: pointer;
+  font-size: 14px;
+  color: var(--text-color);
+  transition: all 0.2s;
+}
+
+/* 不同级别标题的缩进 */
+.toc-item.level-1 { padding-left: 0; }
+.toc-item.level-2 { padding-left: 16px; }
+.toc-item.level-3 { padding-left: 32px; }
+.toc-item.level-4 { padding-left: 48px; }
+
+/* 设置按钮样式 */
+#settings-toggle {
+  position: fixed;
+  right: 20px;
+  top: 20px;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: var(--bg-color);
+  border: 1px solid var(--border-color);
+  color: var(--text-color);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  z-index: 10000;
+  transition: all 0.2s;
+}
+
+#settings-toggle:hover {
+  background: var(--hover-color);
+  transform: scale(1.05);
+}
+
+/* 目录容器样式 */
+.toc-container {
+  margin-bottom: 20px;
+}
+
+.toc-container h3 {
+  margin: 0 0 16px 0;
+  font-size: 18px;
+  color: var(--title-color);
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--border-color);
+}
+
+/* 录项悬停效果 */
+.toc-item:hover {
+  color: var(--title-color);
+  background: var(--hover-color);
+  padding-left: calc(inherit + 8px);
+}
+
+/* 设置面板内的样式 */
+.settings-item {
+  margin-bottom: 16px;
+}
+
+.settings-item label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 500;
+}
+
+.settings-item select,
+.settings-item input[type="range"] {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  background: var(--bg-color);
+  color: var(--text-color);
+}
+
+.settings-item input[type="range"] {
+  padding: 0;
+}
+
+.settings-item span {
+  display: block;
+  text-align: right;
+  margin-top: 4px;
+  font-size: 12px;
+  color: var(--text-color);
+}
+
+/* 深色主题下的链接样式 */
+.theme-dark #reader-mode-container a {
+  color: var(--dark-link);
+  text-decoration: none;
+}
+
+.theme-dark #reader-mode-container a:hover {
+  color: var(--dark-link-hover);
+  text-decoration: underline;
+}
+
+/* 深色主题下的设置面板和侧边栏样式优化 */
+.theme-dark #settings-panel,
+.theme-dark #reader-sidebar {
+  background: #242424;  /* 稍微亮一点的背景 */
+  border-color: var(--dark-border);
+}
+
+/* 深色主题下的输入控件样式优化 */
+.theme-dark .settings-item select,
+.theme-dark .settings-item input {
+  background: #333333;
+  border-color: #555555;
+  color: #ffffff;
+}
+
+/* 深色主题下的滚动条样式 */
+.theme-dark ::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+.theme-dark ::-webkit-scrollbar-track {
+  background: #242424;
+}
+
+.theme-dark ::-webkit-scrollbar-thumb {
+  background: #444444;
+  border-radius: 4px;
+}
+
+.theme-dark ::-webkit-scrollbar-thumb:hover {
+  background: #555555;
+}
+
+/* 深色主题下的标题层级区分 */
+.theme-dark #reader-mode-container h1 { color: #ffffff; }
+.theme-dark #reader-mode-container h2 { color: #f0f0f0; }
+.theme-dark #reader-mode-container h3 { color: #e0e0e0; }
+.theme-dark #reader-mode-container h4 { color: #d0d0d0; }
+
+/* 深色主题下的引用块样式 */
+.theme-dark #reader-mode-container blockquote {
+  background: #242424;
+  border-left: 4px solid #444444;
+  color: #cccccc;
+}
+
+/* 深色主题下的代码块样式 */
+.theme-dark #reader-mode-container pre,
+.theme-dark #reader-mode-container code {
+  background: #242424;
+  border: 1px solid #444444;
+  color: #e0e0e0;
+}
+
+/* 深色主题下的表格样式 */
+.theme-dark #reader-mode-container table {
+  border-color: #444444;
+}
+
+.theme-dark #reader-mode-container th,
+.theme-dark #reader-mode-container td {
+  border-color: #444444;
+}
+
+.theme-dark #reader-mode-container th {
+  background: #242424;
+}
+
+.theme-dark #reader-mode-container tr:nth-child(even) {
+  background: #1f1f1f;
+}
+
+/* 深色主题下的特定样式 */
+.theme-dark {
+  --bg-color: var(--dark-bg);
+  --text-color: var(--dark-text);
+  --title-color: var(--dark-title);
+  --border-color: var(--dark-border);
+  --hover-color: var(--dark-hover);
+}
+
+/* 深色主题下的文本元素 */
+.theme-dark #reader-mode-container p,
+.theme-dark #reader-mode-container li,
+.theme-dark #reader-mode-container span,
+.theme-dark #reader-mode-container div {
+  color: #ffffff !important; /* 强制使用白色 */
+}
+
+/* 深色主题下的标题 */
+.theme-dark #reader-mode-container h1,
+.theme-dark #reader-mode-container h2,
+.theme-dark #reader-mode-container h3,
+.theme-dark #reader-mode-container h4 {
+  color: #ffffff !important;
+}
+
+/* 深色主题下的设置面板文本 */
+.theme-dark .settings-item label,
+.theme-dark .settings-item span {
+  color: #ffffff;
+}
+
+/* 深色主题下的目录文本 */
+.theme-dark .toc-item {
+  color: #ffffff;
+}
+
+/* 深色主题下的其他文本元素 */
+.theme-dark #reader-mode-container small,
+.theme-dark #reader-mode-container em,
+.theme-dark #reader-mode-container strong {
+  color: #ffffff;
+}
+
+/* 自定义字体输入框样式 */
+#custom-font-input input {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  background: var(--bg-color);
+  color: var(--text-color);
+  font-size: 14px;
+}
+
+/* 字体选择下拉框组样式 */
+#font-family-select optgroup {
+  font-weight: bold;
+  color: var(--text-color);
+}
+
+#font-family-select option {
+  padding: 4px;
+}
+
+/* 深色模式下的输入框样式 */
+.theme-dark #custom-font-input input {
+  background: #333333;
+  border-color: #555555;
+  color: #ffffff;
+}
+
+/* 在现有的 CSS 中添加导出按钮样式 */
+#export-button {
+  position: fixed;
+  right: 20px;
+  top: 70px; /* 位于设置按钮下方 */
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: var(--bg-color);
+  border: 1px solid var(--border-color);
+  color: var(--text-color);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  z-index: 10000;
+  transition: all 0.2s;
+}
+
+#export-button:hover {
+  background: var(--hover-color);
+  transform: scale(1.05);
+}
+
+/* 打印样式优化 */
+@media print {
+  #reader-sidebar,
+  #settings-toggle,
+  #export-button,
+  #settings-panel,
+  #settings-overlay {
+    display: none !important;
+  }
+
+  #reader-mode-container {
+    margin: 0 auto !important;
+    width: 100% !important;
+    max-width: none !important;
+    padding: 0 !important;
+    color: #000 !important;
+    background: #fff !important;
+  }
+
+  @page {
+    margin: 2cm;
+  }
+}
+
+/* 导出按钮组样式 */
+#export-group {
+  position: fixed;
+  right: 20px;
+  top: 70px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  z-index: 10000;
+}
+
+.export-button {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: var(--bg-color);
+  border: 1px solid var(--border-color);
+  color: var(--text-color);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  transition: all 0.2s;
+}
+
+.export-button:hover {
+  background: var(--hover-color);
+  transform: scale(1.05);
+}
+
+#export-pdf-button {
+  margin-bottom: 0;
+}
+
+/* 打印样式中添加导出按钮的隐藏 */
+@media print {
+  #export-group {
+    display: none !important;
+  }
+}
+
+/* 修改按钮组样式 */
+.control-buttons {
+  position: fixed;
+  right: 20px;
+  top: 20px;
+  display: flex;
+  gap: 10px;
+  z-index: 10000;
+}
+
+.control-button {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: var(--bg-color);
+  border: 1px solid var(--border-color);
+  color: var(--text-color);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  transition: all 0.2s;
+}
+
+.control-button:hover {
+  background: var(--hover-color);
+  transform: scale(1.05);
+}
+
+/* Markdown 预览弹窗样式 */
+#markdown-modal {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 80%;
+  max-width: 800px;
+  max-height: 80vh;
+  background: var(--bg-color);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  z-index: 10002;
+  display: none;
+}
+
+#markdown-modal.show {
+  display: block;
+}
+
+.modal-header {
+  padding: 16px;
+  border-bottom: 1px solid var(--border-color);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.modal-title {
+  font-size: 18px;
+  font-weight: 500;
+  color: var(--text-color);
+}
+
+.modal-close {
+  background: none;
+  border: none;
+  color: var(--text-color);
+  cursor: pointer;
+  font-size: 20px;
+  padding: 4px;
+}
+
+.modal-content {
+  padding: 16px;
+  overflow-y: auto;
+  max-height: calc(80vh - 130px);
+}
+
+#markdown-content {
+  width: 100%;
+  height: 100%;
+  min-height: 300px;
+  padding: 12px;
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  background: var(--bg-color);
+  color: var(--text-color);
+  font-family: monospace;
+  line-height: 1.5;
+  resize: vertical;
+  white-space: pre-wrap;
+  outline: none;
+}
+
+#markdown-content:focus {
+  border-color: #1a73e8;
+  box-shadow: 0 0 0 2px rgba(26, 115, 232, 0.2);
+}
+
+.modal-footer {
+  padding: 16px;
+  border-top: 1px solid var(--border-color);
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+.modal-button {
+  padding: 8px 16px;
+  border-radius: 4px;
+  border: 1px solid var(--border-color);
+  background: var(--bg-color);
+  color: var(--text-color);
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.modal-button:hover {
+  background: var(--hover-color);
+}
+
+.modal-button.primary {
+  background: #1a73e8;
+  color: white;
+  border-color: #1a73e8;
+}
+
+.modal-button.primary:hover {
+  background: #1557b0;
+}
