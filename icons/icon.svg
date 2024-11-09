@@ -1,6 +1,40 @@
 <svg width="128" height="128" viewBox="0 0 128 128" xmlns="http://www.w3.org/2000/svg">
-  <rect x="24" y="24" width="80" height="80" rx="8" fill="#000"/>
-  <rect x="36" y="44" width="56" height="4" rx="2" fill="#fff"/>
-  <rect x="36" y="62" width="56" height="4" rx="2" fill="#fff"/>
-  <rect x="36" y="80" width="40" height="4" rx="2" fill="#fff"/>
+  <!-- 背景圆形 -->
+  <circle cx="64" cy="64" r="60" fill="#4A90E2"/>
+  
+  <!-- 书本形状 -->
+  <path d="M40 38
+           C40 35.8 41.8 34 44 34
+           H84
+           C86.2 34 88 35.8 88 38
+           V90
+           C88 92.2 86.2 94 84 94
+           H44
+           C41.8 94 40 92.2 40 90
+           V38Z" 
+        fill="white"/>
+  
+  <!-- 书页纹理 -->
+  <rect x="48" y="46" width="32" height="2" rx="1" fill="#4A90E2" opacity="0.6"/>
+  <rect x="48" y="54" width="24" height="2" rx="1" fill="#4A90E2" opacity="0.6"/>
+  <rect x="48" y="62" width="28" height="2" rx="1" fill="#4A90E2" opacity="0.6"/>
+  <rect x="48" y="70" width="20" height="2" rx="1" fill="#4A90E2" opacity="0.6"/>
+  <rect x="48" y="78" width="26" height="2" rx="1" fill="#4A90E2" opacity="0.6"/>
+  
+  <!-- 书脊阴影 -->
+  <path d="M44 34
+           H48
+           V94
+           H44
+           C41.8 94 40 92.2 40 90
+           V38
+           C40 35.8 41.8 34 44 34Z" 
+        fill="#3A7BCE"/>
+  
+  <!-- 右上角折角效果 -->
+  <path d="M84 34
+           L88 38
+           V34
+           H84Z" 
+        fill="#3A7BCE"/>
 </svg> 

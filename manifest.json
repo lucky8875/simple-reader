@@ -1,6 +1,6 @@
 {
   "manifest_version": 3,
-  "name": "简洁阅读模式",
+  "name": "简洁阅读（simple reader）",
   "version": "1.0",
   "description": "提供清爽的阅读体验，去除干扰元素",
   "permissions": [
